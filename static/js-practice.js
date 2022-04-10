@@ -116,3 +116,45 @@ function showPuppies(results) {
 }
 
 // Your Code Here
+
+// function showPuppies() {
+//   document.querySelector("#puppy-form").addEventListener("submit", (evt) => {
+//     evt.preventDefault();
+
+//     const numPuppies = Number(document.querySelector("#num-puppies").value);
+
+//     const url = `/puppies.json?num-puppies=${numPuppies}`;
+
+//     fetch(url)
+//       .then((response) => response.json())
+//       .then((jsonResponse) => showPuppies(jsonResponse));
+//   });
+// }
+
+function showPuppies(results) {
+  // get the URL for the puppy photo out of the results object
+  const puppyURL = results.url;
+  const puppyDiv = document.querySelector("#puppies-go-here");
+  // clear anything currently in the div
+  puppyDiv.innerHTML = null;
+  // add the img element
+  puppyDiv.insertAdjacentHTML(
+    "beforeend",
+    `<img src=${puppyURL} alt="puppy-image">`
+  );
+}
+
+document.querySelector("#puppy-form").addEventListener("submit", (event) => {
+  // prevent the form from triggering a page load
+  event.preventDefault();
+
+  // get the number of puppies selected from the input
+  const numPuppies = document.querySelector("#num-puppies").value;
+  // make the AJAX request
+  // GET requests cannot have a body so we use a query string
+  fetch(`/puppies.json?num-puppies=${numPuppies}`)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      showPuppies(jsonResponse);
+    });
+});
